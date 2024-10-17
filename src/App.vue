@@ -1,55 +1,37 @@
 <script setup lang="ts">
-import Searchbar from './components/TheSearch.vue'
-import TheWelcome from './components/TheWelcome.vue'
-import TodoList from './components/TodoList.vue'
+import { ref } from 'vue';
+import Searchbar from './components/TheSearchbar.vue';
+import TodoList from './components/TodoList.vue';
+import TheCompanyList from './components/TheCompanyList.vue';
+import ThePersonList from './components/ThePersonList.vue';
+
+const searchString = ref('');
 </script>
 
 <template>
-  <header>
-    <img
-      alt="Vue logo"
-      class="logo"
-      src="./assets/logo.svg"
-      width="125"
-      height="125"
-    />
-
-    <Searchbar />
-    <Suspense class="wrapper">
-      <TodoList />
-    </Suspense>
-  </header>
-
   <main>
-    <TheWelcome />
+    <Searchbar
+      :search-string="searchString"
+      @update:search-string="(newVal) => (searchString = newVal)"
+    />
+    <Suspense class="wrapper">
+      <div class="search-results">
+        <TheCompanyList :search-string="searchString" />
+        <ThePersonList :search-string="searchString" />
+        <TodoList :search-string="searchString" />
+      </div>
+    </Suspense>
   </main>
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
+<style scoped lang="css">
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
+.search-results {
+  display: flex;
 }
 </style>
